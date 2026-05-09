@@ -1,0 +1,564 @@
+
+<style>
+:root{--ink:#0f0f0f;--paper:#fafaf8;--smoke:#f2f0ed;--line:#e0ddd8;--muted:#888580;--red:#c0392b;--rl:#fdecea;--green:#1a6b4a;--gl:#e8f5ee;--amber:#b5620a;--al:#fef5e4;--blue:#1d4e89;--bl:#edf2fb;--purple:#5b2d8e;--mono:'Courier New',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Georgia',serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.5;}
+.mast{background:var(--ink);padding:18px 24px 16px;border-bottom:4px solid var(--red);display:flex;align-items:baseline;gap:16px;}
+.mast h1{font-family:'Georgia',serif;font-size:28px;font-weight:700;letter-spacing:-1px;color:#fff;}
+.mast .sub{font-family:var(--mono);font-size:10px;color:#aaa;letter-spacing:.1em;text-transform:uppercase;}
+.mast .badge{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.1em;border:1px solid var(--red);padding:3px 8px;}
+.ynav{background:var(--smoke);border-bottom:1px solid var(--line);padding:0 24px;display:flex;}
+.ybtn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;padding:11px 18px;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--muted);transition:all .15s;}
+.ybtn:hover{color:var(--ink);}
+.ybtn.active{color:var(--ink);border-bottom-color:var(--red);}
+.lnav{background:#fff;border-bottom:1px solid var(--line);padding:0 24px;display:flex;overflow-x:auto;}
+.lbtn{font-family:'Georgia',serif;font-size:12px;padding:9px 15px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--muted);white-space:nowrap;transition:all .15s;}
+.lbtn:hover{color:var(--ink);}
+.lbtn.active{color:var(--ink);border-bottom-color:var(--blue);}
+.main{padding:20px 24px;}
+.ms{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);margin-bottom:18px;}
+.mc{padding:14px 16px;border-right:1px solid var(--line);}
+.mc:last-child{border-right:none;}
+.ml{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.mv{font-family:'Georgia',serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;}
+.md{font-family:var(--mono);font-size:9px;margin-top:4px;}
+.dd{color:var(--red);}.du{color:var(--green);}.dn{color:var(--muted);}
+.ab{background:var(--rl);border-left:4px solid var(--red);padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.at{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:#fff;padding:2px 7px;flex-shrink:0;}
+.atx{font-size:12px;color:#8b1a1a;}
+.ib{background:var(--gl);border-left:4px solid var(--green);padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.it{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:var(--green);color:#fff;padding:2px 7px;flex-shrink:0;}
+.itx{font-size:12px;color:#0f4a2c;}
+.wab{background:var(--al);border-left:4px solid var(--amber);padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.wt{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:var(--amber);color:#fff;padding:2px 7px;flex-shrink:0;}
+.wtx{font-size:12px;color:#5a3005;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.card{border:1px solid var(--line);background:#fff;padding:16px 18px;}
+.ch{font-family:'Georgia',serif;font-size:14px;font-weight:700;margin-bottom:3px;}
+.cd{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.04em;margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:8px;}
+.cw{position:relative;width:100%;}
+.hbox{border:1px solid var(--line);background:var(--smoke);padding:16px;text-align:center;}
+.hn{font-family:'Georgia',serif;font-size:40px;font-weight:700;line-height:1;color:var(--ink);}
+.hn.r{color:var(--red);}.hn.g{color:var(--green);}.hn.a{color:var(--amber);}
+.hl{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+/* SCENARIO BOXES */
+.scenarios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.sc-box{border:2px solid var(--line);padding:18px;position:relative;}
+.sc-box.worse{border-color:var(--red);}
+.sc-box.same{border-color:var(--muted);}
+.sc-box.better{border-color:var(--green);}
+.sc-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;font-weight:700;}
+.sc-label.worse{color:var(--red);}.sc-label.same{color:var(--muted);}.sc-label.better{color:var(--green);}
+.sc-big{font-family:'Georgia',serif;font-size:36px;font-weight:700;line-height:1;margin-bottom:6px;}
+.sc-big.worse{color:var(--red);}.sc-big.same{color:var(--muted);}.sc-big.better{color:var(--green);}
+.sc-stat{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;}
+.sc-stat span{color:var(--ink);font-weight:700;}
+/* PRODUCTION ALERT */
+.prod-panel{background:var(--ink);color:#fff;padding:20px 22px;margin-bottom:14px;}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-top:14px;}
+.prod-cell{border:1px solid #333;padding:12px;}
+.prod-label{font-family:var(--mono);font-size:8px;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.prod-val{font-family:'Georgia',serif;font-size:22px;font-weight:700;color:#fff;}
+.prod-sub{font-family:var(--mono);font-size:9px;color:#aaa;margin-top:4px;}
+.prod-val.a{color:#f39c12;}.prod-val.r{color:#e74c3c;}.prod-val.g{color:#2ecc71;}
+/* AI PANEL */
+.aip{background:var(--ink);color:#fff;padding:20px 22px;margin-bottom:14px;}
+.aip-head{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.aip-head::after{content:'';flex:1;height:1px;background:#333;}
+.aip-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.aip-cross{border:1px solid #333;padding:12px;}
+.aip-title{font-family:var(--mono);font-size:8px;color:#888;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+.aip-text{font-family:'Georgia',serif;font-size:12px;color:#f0f0f0;line-height:1.5;}
+.aip-num{font-family:'Georgia',serif;font-size:20px;font-weight:700;color:#fff;margin-top:6px;}
+.aip-num.r{color:#e74c3c;}.aip-num.g{color:#2ecc71;}.aip-num.a{color:#f39c12;}
+.dt{width:100%;border-collapse:collapse;font-size:11px;}
+.dt th{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);padding:6px 8px;text-align:left;background:var(--smoke);}
+.dt td{padding:6px 8px;border-bottom:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:10px;}
+.dt tr:hover td{background:var(--smoke);}
+.dt td.n{text-align:right;}.dt td.hi{font-weight:700;font-family:'Georgia',serif;font-size:11px;}
+.pill{display:inline-block;padding:1px 6px;font-size:8px;border-radius:0;}
+.pr{background:var(--rl);color:var(--red);}.pg{background:var(--gl);color:var(--green);}.pa{background:var(--al);color:var(--amber);}.pb{background:var(--bl);color:var(--blue);}
+.sh{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:14px;margin-top:6px;display:flex;align-items:center;gap:10px;}
+.sh span{flex:1;height:1px;background:var(--line);}
+.lp{display:none;}.lp.active{display:block;}
+.yc{display:none;}.yc.active{display:block;}
+.footer{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-family:var(--mono);font-size:8px;letter-spacing:.06em;color:var(--muted);display:flex;justify-content:space-between;}
+/* period badge */
+.period-tag{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;margin-left:8px;vertical-align:middle;}
+.period-q1{background:var(--al);color:var(--amber);}
+.period-full{background:var(--gl);color:var(--green);}
+.period-proj{background:var(--bl);color:var(--blue);}
+</style>
+
+<div class="mast">
+  <div><h1>PULSO</h1><div class="sub">Inteligencia de Audiencia · Vanguardia Digital</div></div>
+  <div class="badge">LAB. INNOVACIÓN EDITORIAL · 2026</div>
+</div>
+
+<div class="ynav">
+  <button class="ybtn active" onclick="setY('2026',this)">2026 · Q1 (ene–abr) + proyecciones</button>
+  <button class="ybtn" onclick="setY('2025',this)">2025 · Año completo</button>
+  <button class="ybtn" onclick="setY('2024',this)">2024 · Año completo</button>
+  <button class="ybtn" onclick="setY('cruces',this)">⚡ Cruces críticos</button>
+</div>
+<div class="lnav">
+  <button class="lbtn active" onclick="setL('resumen',this)">Panorama</button>
+  <button class="lbtn" onclick="setL('proyecciones',this)">Proyecciones 2026</button>
+  <button class="lbtn" onclick="setL('produccion',this)">Producción</button>
+  <button class="lbtn" onclick="setL('lealtad',this)">Lealtad</button>
+  <button class="lbtn" onclick="setL('canales',this)">Canales</button>
+  <button class="lbtn" onclick="setL('autores',this)">Autores</button>
+</div>
+
+<div class="main">
+
+<!-- ====== 2026 ====== -->
+<div class="yc active" id="yr-2026">
+
+  <!-- PANORAMA -->
+  <div class="lp active" id="yr-2026-resumen">
+    <div class="ab"><span class="at">🚨 Q1 2026 — ene–abr</span><span class="atx">Solo 4 meses de datos. En ese primer cuatrimestre, Vanguardia perdió el 81% de sus Lovers, el 77% de sus Loyals y el 76% de usuarios vs 2025 completo. Si no cambia nada, el año termina con menos de 400 Lovers activos.</span></div>
+    <div class="ms">
+      <div class="mc"><div class="ml">Usuarios Q1 2026</div><div class="mv">6.8M</div><div class="md dd">▼ 76% vs 2025 anual</div></div>
+      <div class="mc"><div class="ml">Pageviews Q1 2026</div><div class="mv">17.2M</div><div class="md dd">▼ 84% vs 2025 anual</div></div>
+      <div class="mc"><div class="ml">RFV promedio</div><div class="mv">18.0</div><div class="md du">▲ vs 15.9 en 2025</div></div>
+      <div class="mc"><div class="ml">Arts. digitales/mes</div><div class="mv">5,295</div><div class="md du">▲ +7.7% vs 2025</div></div>
+      <div class="mc"><div class="ml">PV por artículo</div><div class="mv">811</div><div class="md dd">▼ –55% vs 1,808 en 2025</div></div>
+    </div>
+    <div class="g3">
+      <div class="hbox"><div class="hn r">–81%</div><div class="hl">Caída de Lovers Q1<br>49,705 → 9,356</div></div>
+      <div class="hbox"><div class="hn r">–77%</div><div class="hl">Caída de Loyals Q1<br>187,498 → 43,646</div></div>
+      <div class="hbox"><div class="hn a">811</div><div class="hl">PV / artículo en Q1<br>vs 1,808 en 2025 (–55%)</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch">Colapso de segmentos: Q1 2026 vs 2025 anual</div><div class="cd">Escala log. La caída más brutal es en el núcleo fiel: Lovers y Loyals.</div><div class="cw" style="height:230px"><canvas id="c26_seg" role="img" aria-label="Segmentos Q1 2026 vs 2025"></canvas></div></div>
+      <div class="card"><div class="ch">Engagement por segmento — Q1 2026</div><div class="cd">Lovers: 30,237 seg = 8.4 horas. La señal de conversión más potente del medio.</div><div class="cw" style="height:230px"><canvas id="c26_eng" role="img" aria-label="Engagement Q1 2026"></canvas></div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch">Mix tráfico Q1 2026</div><div class="cd">Search cayó de 78% → 57%. Social sube en peso pero baja en calidad.</div><div class="cw" style="height:200px"><canvas id="c26_mix" role="img" aria-label="Mix 2026"></canvas></div></div>
+      <div class="card"><div class="ch">Pageviews / usuario por segmento</div><div class="cd">Un Lover genera 227 páginas. Un New genera 1.3. La brecha lo explica todo.</div><div class="cw" style="height:200px"><canvas id="c26_pvpu" role="img" aria-label="PV/u 2026"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- PROYECCIONES -->
+  <div class="lp" id="yr-2026-proyecciones">
+    <div class="wab"><span class="wt">⚠ Proyección</span><span class="wtx">Basada en el ritmo real de Q1 (ene–abr 2026). Si la tendencia continúa sin intervención, los Lovers llegarían a diciembre con menos de 400 lectores activos. Estos son los tres escenarios con cálculo exacto.</span></div>
+
+    <div class="scenarios">
+      <div class="sc-box worse">
+        <div class="sc-label worse">📉 Escenario peor — deterioro Q2–Q4</div>
+        <div class="sc-big worse">18.3M</div>
+        <div class="sc-stat">Usuarios totales anuales estimados</div>
+        <div class="sc-stat" style="margin-top:8px">PV anuales: <span>~46M</span></div>
+        <div class="sc-stat">Lovers a dic-26: <span style="color:var(--red)">~180</span></div>
+        <div class="sc-stat">Loyals a dic-26: <span style="color:var(--red)">~1,200</span></div>
+        <div class="sc-stat" style="margin-top:8px;font-size:9px;color:#999">Supone –15% adicional en ritmo Q2–Q4 vs Q1</div>
+      </div>
+      <div class="sc-box same">
+        <div class="sc-label same">➡ Escenario mismo ritmo</div>
+        <div class="sc-big same">20.3M</div>
+        <div class="sc-stat">Usuarios totales anuales estimados</div>
+        <div class="sc-stat" style="margin-top:8px">PV anuales: <span>~51.5M</span></div>
+        <div class="sc-stat">Lovers a dic-26: <span style="color:#888">~331</span></div>
+        <div class="sc-stat">Loyals a dic-26: <span style="color:#888">~2,365</span></div>
+        <div class="sc-stat" style="margin-top:8px;font-size:9px;color:#999">Ritmo mensual Q1 proyectado a los 12 meses</div>
+      </div>
+      <div class="sc-box better">
+        <div class="sc-label better">📈 Escenario mejor — recuperación Q2</div>
+        <div class="sc-big better">23.0M</div>
+        <div class="sc-stat">Usuarios totales anuales estimados</div>
+        <div class="sc-stat" style="margin-top:8px">PV anuales: <span>~61M</span></div>
+        <div class="sc-stat">Lovers a dic-26: <span style="color:var(--green)">~700–900</span></div>
+        <div class="sc-stat">Loyals a dic-26: <span style="color:var(--green)">~6,000</span></div>
+        <div class="sc-stat" style="margin-top:8px;font-size:9px;color:#999">Supone +20% en ritmo mensual desde Q2 (intervención)</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch">Proyección de Lovers por escenario — 2026 mes a mes</div>
+      <div class="cd">El segmento más valioso se extingue en los tres escenarios si no hay una intervención de conversión activa</div>
+      <div class="cw" style="height:240px"><canvas id="cx_lovers_proj" role="img" aria-label="Proyección Lovers 2026"></canvas></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch">Proyección de usuarios totales — 2026 mes a mes</div>
+      <div class="cd">Comparación de los tres escenarios vs el ritmo real de Q1</div>
+      <div class="cw" style="height:240px"><canvas id="cx_users_proj" role="img" aria-label="Proyección usuarios 2026"></canvas></div>
+    </div>
+
+    <div class="ab"><span class="at">Qué necesita pasar para el escenario mejor</span><span class="atx">Activar paywall suave en mayo. Lanzar newsletter con CTA de conversión. Reducir producción digital en 20% y concentrar en artículos de alta fidelización. Optimizar para canal AI (Perplexity, ChatGPT). Esto puede mover el ritmo mensual +20% desde Q2.</span></div>
+  </div>
+
+  <!-- PRODUCCIÓN -->
+  <div class="lp" id="yr-2026-produccion">
+    <div class="prod-panel">
+      <div class="aip-head">Producción · Q1 2026 con impreso y digital</div>
+      <div class="prod-grid">
+        <div class="prod-cell"><div class="prod-label">Digital mensual Q1 2026</div><div class="prod-val a">5,295</div><div class="prod-sub">artículos/mes (+7.7% vs 2025)</div></div>
+        <div class="prod-cell"><div class="prod-label">Impreso mensual estimado</div><div class="prod-val">~3,000</div><div class="prod-sub">piezas/mes (edición impresa)</div></div>
+        <div class="prod-cell"><div class="prod-label">Total producción mensual</div><div class="prod-val">~8,295</div><div class="prod-sub">digital + impreso combinados</div></div>
+        <div class="prod-cell"><div class="prod-label">Digital anualizado 2026</div><div class="prod-val r">63,543</div><div class="prod-sub">proyección a 12 meses (+7.7%)</div></div>
+      </div>
+    </div>
+
+    <div class="ab"><span class="at">La paradoja más demoledora</span><span class="atx">En Q1 2026 se producen MÁS artículos digitales que en cualquier mes de 2025 (5,295 vs 4,918/mes). Pero cada artículo genera MENOS de la mitad de pageviews: 811 PV/artículo vs 1,808 en 2025. Se trabaja más, se alcanza menos. El problema no es la producción — es la distribución.</span></div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="ch">PV por artículo publicado — eficiencia editorial</div>
+        <div class="cd">El indicador más urgente: cada artículo llega a menos lectores que nunca</div>
+        <div class="cw" style="height:220px"><canvas id="cx_pv_art" role="img" aria-label="PV por artículo"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="ch">Volumen de producción digital vs alcance</div>
+        <div class="cd">La producción sube mientras el alcance colapsa — inversión de la curva normal</div>
+        <div class="cw" style="height:220px"><canvas id="cx_prod_reach" role="img" aria-label="Producción vs alcance"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch">Análisis de producción completo · 2024–2026</div>
+      <div class="cd">Digital mensual, impreso estimado, total, PV/artículo y eficiencia relativa</div>
+      <table class="dt">
+        <tr><th>Período</th><th class="n">Arts. digital/mes</th><th class="n">Impreso/mes</th><th class="n">Total/mes</th><th class="n">Digital anual</th><th class="n">PV/artículo</th><th class="n">Eficiencia</th></tr>
+        <tr><td class="hi">2024 (año completo)</td><td class="n">4,936</td><td class="n">~3,000</td><td class="n">~7,936</td><td class="n">59,228</td><td class="n">n/d</td><td class="n"><span class="pill pb">Base</span></td></tr>
+        <tr><td class="hi">2025 (año completo)</td><td class="n">4,918</td><td class="n">~3,000</td><td class="n">~7,918</td><td class="n">59,016</td><td class="n">1,808</td><td class="n"><span class="pill pg">100%</span></td></tr>
+        <tr style="background:#fff8ee"><td class="hi">2026 Q1 (ene–abr)</td><td class="n">5,295</td><td class="n">~3,000</td><td class="n">~8,295</td><td class="n">63,543*</td><td class="n">811</td><td class="n"><span class="pill pr">44.8%</span></td></tr>
+        <tr><td class="hi">2026 proyección anual</td><td class="n">5,295</td><td class="n">~3,000</td><td class="n">~8,295</td><td class="n">63,543</td><td class="n">~811</td><td class="n"><span class="pill pr">–55%</span></td></tr>
+      </table>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:8px">* Proyección anual basada en ritmo mensual Q1 (5,295/mes × 12)</div>
+    </div>
+
+    <div class="ib" style="margin-top:14px"><span class="it">Recomendación editorial urgente</span><span class="itx">Si la eficiencia cayó 55% con la misma producción, publicar 20% menos artículos de mayor calidad libera 1,059 artículos/mes para invertir en profundidad, SEO estructural y formatos que fidelizan. La cantidad no es el problema — la estrategia de distribución sí.</span></div>
+  </div>
+
+  <!-- LEALTAD -->
+  <div class="lp" id="yr-2026-lealtad">
+    <div class="sh">Embudo de lealtad · Q1 2026 (enero–abril) <span></span></div>
+    <div class="g4">
+      <div class="hbox"><div class="hn">6.2M</div><div class="hl">New</div></div>
+      <div class="hbox"><div class="hn">1.1M</div><div class="hl">Fly by</div></div>
+      <div class="hbox"><div class="hn">738K</div><div class="hl">Won back</div></div>
+      <div class="hbox"><div class="hn r">9,356</div><div class="hl">Lovers ★ (en extinción)</div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="ch">Distribución completa · Q1 2026</div>
+      <table class="dt">
+        <tr><th>Segmento</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">RFV</th><th class="n">Eng/u</th><th class="n">Dur/u</th><th class="n">PV/u</th><th class="n">Scroll</th></tr>
+        <tr><td>New</td><td class="n">6,164,998</td><td class="n">8.3M</td><td class="n">0.97</td><td class="n">43s</td><td class="n">156s</td><td class="n">1.35</td><td class="n">22.96%</td></tr>
+        <tr><td>Fly by</td><td class="n">1,098,239</td><td class="n">2.0M</td><td class="n">6.00</td><td class="n">72s</td><td class="n">240s</td><td class="n">1.84</td><td class="n">23.07%</td></tr>
+        <tr><td>Won back</td><td class="n">738,397</td><td class="n">1.3M</td><td class="n">0.94</td><td class="n">84s</td><td class="n">202s</td><td class="n">1.74</td><td class="n">29.77%</td></tr>
+        <tr><td>Casual</td><td class="n">537,956</td><td class="n">3.1M</td><td class="n">19.27</td><td class="n">159s</td><td class="n">736s</td><td class="n">5.70</td><td class="n">18.13%</td></tr>
+        <tr><td>Loyal</td><td class="n">43,646</td><td class="n">1.1M</td><td class="n">46.69</td><td class="n">896s</td><td class="n">3,261s</td><td class="n">24.70</td><td class="n">28.43%</td></tr>
+        <tr style="background:#0f0f0f;color:#fff"><td class="hi" style="color:#f0f0f0">Lover ★</td><td class="n" style="color:#fff">9,356</td><td class="n" style="color:#fff">2.1M</td><td class="n" style="color:#f39c12">83.56</td><td class="n" style="color:#2ecc71">8,468s</td><td class="n" style="color:#fff">30,237s</td><td class="n" style="color:#fff">224.4</td><td class="n" style="color:#fff">33.23%</td></tr>
+        <tr style="font-weight:700;background:#f5f5f5"><td>Total</td><td class="n">6,765,237</td><td class="n">17.2M</td><td class="n">18.03</td><td class="n">86s</td><td class="n">313s</td><td class="n">2.54</td><td class="n">24.30%</td></tr>
+      </table>
+    </div>
+    <div class="card"><div class="ch">% Usuarios vs % Pageviews — dónde está el valor</div><div class="cd">Lovers = 0.14% de usuarios → 12.4% de PV. La audiencia de conversión perfecta está desapareciendo.</div><div class="cw" style="height:230px"><canvas id="c26_funnel" role="img" aria-label="Funnel Q1 2026"></canvas></div></div>
+  </div>
+
+  <!-- CANALES -->
+  <div class="lp" id="yr-2026-canales">
+    <div class="sh">Tráfico por canal · Q1 2026 <span></span></div>
+    <div class="ab"><span class="at">Crisis Search</span><span class="atx">Search cayó de 21.7M usuarios (2025 anual) a 3.8M en solo 4 meses. A este ritmo, aporta menos de 12M en el año completo vs 76M en 2025. El impacto del AI Overview de Google es estructural.</span></div>
+    <div class="ib"><span class="it">Canal AI estable</span><span class="itx">Canal AI (Perplexity, ChatGPT, Gemini): 51K usuarios casi sin pérdida vs 52K en 2025. Scroll 37%, engagement sube de 56s a 64s. Es el único canal que crece en calidad y resiste.</span></div>
+    <div class="g2">
+      <div class="card"><div class="ch">Usuarios por canal Q1 2026</div><div class="cd">Social ya es el 37% del mix — pero con engagement 50s vs 94s en 2025</div><div class="cw" style="height:210px"><canvas id="c26_cu" role="img" aria-label="Canales usuarios Q1 2026"></canvas></div></div>
+      <div class="card"><div class="ch">RFV por canal — Q1 2026 vs 2025</div><div class="cd">Direct y Email sostienen la fidelidad. Social se erosiona con el volumen.</div><div class="cw" style="height:210px"><canvas id="c26_cr" role="img" aria-label="RFV canales"></canvas></div></div>
+    </div>
+    <div class="card"><table class="dt">
+      <tr><th>Canal</th><th class="n">Usuarios Q1</th><th class="n">PV Q1</th><th class="n">RFV</th><th class="n">Eng/u</th><th class="n">Scroll</th><th>Tendencia</th></tr>
+      <tr><td class="hi">Search</td><td class="n">3,846,229</td><td class="n">7.9M</td><td class="n">9.33</td><td class="n">89s</td><td class="n">28.25%</td><td><span class="pill pr">Crisis –82%</span></td></tr>
+      <tr><td class="hi">Social</td><td class="n">2,511,596</td><td class="n">6.3M</td><td class="n">13.01</td><td class="n">50s</td><td class="n">13.28%</td><td><span class="pill pa">Sube mix, baja calidad</span></td></tr>
+      <tr><td class="hi">Direct ⭐</td><td class="n">294,140</td><td class="n">2.4M</td><td class="n">56.19</td><td class="n">331s</td><td class="n">37.39%</td><td><span class="pill pg">Estable alta fidelidad</span></td></tr>
+      <tr><td class="hi">Referral</td><td class="n">131,812</td><td class="n">294K</td><td class="n">23.39</td><td class="n">90s</td><td class="n">31.47%</td><td><span class="pill pa">Cae moderado</span></td></tr>
+      <tr><td class="hi">AI ⭐</td><td class="n">51,411</td><td class="n">79K</td><td class="n">5.49</td><td class="n">64s</td><td class="n">37.32%</td><td><span class="pill pg">Único que no cae</span></td></tr>
+      <tr><td class="hi">Email ⭐</td><td class="n">7,059</td><td class="n">47.6K</td><td class="n">35.86</td><td class="n">364s</td><td class="n">37.73%</td><td><span class="pill pg">Resistente y fiel</span></td></tr>
+      <tr><td class="hi">GNews</td><td class="n">8,217</td><td class="n">14K</td><td class="n">12.67</td><td class="n">107s</td><td class="n">40.40%</td><td><span class="pill pb">Pequeño pero fiel</span></td></tr>
+    </table></div>
+  </div>
+
+  <!-- AUTORES -->
+  <div class="lp" id="yr-2026-autores">
+    <div class="sh">Autores · Q1 2026 <span></span></div>
+    <div class="g2">
+      <div class="card"><div class="ch">Top autores por pageviews</div><div class="cd">Carlos Martínez concentra 24% de todo el tráfico digital del Q1</div><div class="cw" style="height:250px"><canvas id="c26_apv" role="img" aria-label="PV autores Q1 2026"></canvas></div></div>
+      <div class="card"><div class="ch">Top autores por RFV (fidelización)</div><div class="cd">Catón y Armando Fuentes: máxima fidelidad. Lectores que vuelven.</div><div class="cw" style="height:250px"><canvas id="c26_arfv" role="img" aria-label="RFV autores Q1 2026"></canvas></div></div>
+    </div>
+    <div class="card"><div class="ch">Paradoja tráfico-fidelidad</div><div class="cd">Volumen ≠ lealtad. La estrategia editorial necesita equilibrar ambos.</div>
+      <table class="dt">
+        <tr><th>Autor</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">RFV</th><th class="n">Eng/u</th><th class="n">Scroll</th><th>Perfil</th></tr>
+        <tr><td class="hi">Carlos Martínez</td><td class="n">2.3M</td><td class="n">4.0M</td><td class="n">6.78</td><td class="n">77s</td><td class="n">22%</td><td><span class="pill pb">Masivo / RFV bajo</span></td></tr>
+        <tr><td class="hi">Catón ⭐</td><td class="n">29.8K</td><td class="n">90.9K</td><td class="n">54.74</td><td class="n">228s</td><td class="n">42%</td><td><span class="pill pg">Máx. fidelizador</span></td></tr>
+        <tr><td class="hi">Armando F.A. ⭐</td><td class="n">7.4K</td><td class="n">29.6K</td><td class="n">52.08</td><td class="n">136s</td><td class="n">40%</td><td><span class="pill pg">Máx. fidelizador</span></td></tr>
+        <tr><td class="hi">Raymundo R.P. ⭐</td><td class="n">39.6K</td><td class="n">89.5K</td><td class="n">44.26</td><td class="n">181s</td><td class="n">34%</td><td><span class="pill pg">Alta fidelidad</span></td></tr>
+        <tr><td class="hi">Carlos Loret M.</td><td class="n">31.5K</td><td class="n">68.3K</td><td class="n">41.20</td><td class="n">123s</td><td class="n">35%</td><td><span class="pill pg">Alta fidelidad</span></td></tr>
+        <tr><td class="hi">Politicón</td><td class="n">119.1K</td><td class="n">177.4K</td><td class="n">33.78</td><td class="n">74s</td><td class="n">37%</td><td><span class="pill pg">Fidelizador</span></td></tr>
+        <tr><td class="hi">Stephanie León</td><td class="n">369.9K</td><td class="n">701.8K</td><td class="n">18.45</td><td class="n">64s</td><td class="n">24%</td><td><span class="pill pb">Mixto</span></td></tr>
+        <tr><td class="hi">Sara Navarrete</td><td class="n">173.3K</td><td class="n">296.8K</td><td class="n">19.31</td><td class="n">55s</td><td class="n">24%</td><td><span class="pill pa">En crecimiento</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 2025 ====== -->
+<div class="yc" id="yr-2025">
+  <div class="lp active" id="yr-2025-resumen">
+    <div class="ib"><span class="it">Período completo</span><span class="itx">Todos los datos de 2025 corresponden al año completo: 1 enero – 31 diciembre 2025. Es la referencia más sólida para medir el colapso de Q1 2026.</span></div>
+    <div class="ms">
+      <div class="mc"><div class="ml">Usuarios únicos</div><div class="mv">28.0M</div><div class="md dd">▼ 29.2% vs 2024</div></div>
+      <div class="mc"><div class="ml">Pageviews</div><div class="mv">106.7M</div><div class="md dd">▼ 21.6% vs 2024</div></div>
+      <div class="mc"><div class="ml">RFV promedio</div><div class="mv">15.9</div><div class="md du">▲ buena fidelidad base</div></div>
+      <div class="mc"><div class="ml">Artículos digitales</div><div class="mv">59.0K</div><div class="md dn">4,918/mes promedio</div></div>
+      <div class="mc"><div class="ml">PV por artículo</div><div class="mv">1,808</div><div class="md dn">Referencia de eficiencia</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch">Segmentos de lealtad — año completo 2025</div><div class="cd">49,705 Lovers al cierre. En 4 meses de 2026 cayeron 81%.</div><div class="cw" style="height:220px"><canvas id="c25_seg" role="img" aria-label="Segmentos 2025"></canvas></div></div>
+      <div class="card"><div class="ch">Canales de tráfico — año completo 2025</div><div class="cd">Search representaba el 78%. La dependencia estructural era el riesgo oculto.</div><div class="cw" style="height:220px"><canvas id="c25_can" role="img" aria-label="Canales 2025"></canvas></div></div>
+    </div>
+    <div class="g3">
+      <div class="hbox"><div class="hn">49.7K</div><div class="hl">Lovers dic-2025<br>(caerán 81% en 4 meses)</div></div>
+      <div class="hbox"><div class="hn">187K</div><div class="hl">Loyals dic-2025<br>(caerán 77% en 4 meses)</div></div>
+      <div class="hbox"><div class="hn r">6,963s</div><div class="hl">Eng/Lover 2025<br>≈ 1h 56min por sesión</div></div>
+    </div>
+    <div class="card"><div class="ch">Tabla completa de lealtad · 2025</div>
+      <table class="dt">
+        <tr><th>Segmento</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">RFV</th><th class="n">Eng/u</th><th class="n">PV/u</th><th class="n">Scroll</th></tr>
+        <tr><td>New</td><td class="n">24,121,141</td><td class="n">37.5M</td><td class="n">0.98</td><td class="n">50s</td><td class="n">1.55</td><td class="n">25.97%</td></tr>
+        <tr><td>Won back</td><td class="n">6,826,316</td><td class="n">20.5M</td><td class="n">0.94</td><td class="n">97s</td><td class="n">3.01</td><td class="n">21.05%</td></tr>
+        <tr><td>Fly by</td><td class="n">6,528,103</td><td class="n">19.9M</td><td class="n">5.75</td><td class="n">104s</td><td class="n">3.04</td><td class="n">23.85%</td></tr>
+        <tr><td>Casual</td><td class="n">2,395,039</td><td class="n">20.0M</td><td class="n">18.82</td><td class="n">254s</td><td class="n">8.35</td><td class="n">23.19%</td></tr>
+        <tr><td>Loyal</td><td class="n">187,498</td><td class="n">6.1M</td><td class="n">46.42</td><td class="n">1,056s</td><td class="n">32.31</td><td class="n">27.22%</td></tr>
+        <tr style="background:#0f0f0f;color:#fff"><td class="hi" style="color:#f0f0f0">Lover ★</td><td class="n" style="color:#fff">49,705</td><td class="n" style="color:#fff">10.6M</td><td class="n" style="color:#f39c12">83.40</td><td class="n" style="color:#2ecc71">6,963s</td><td class="n" style="color:#fff">212.8</td><td class="n" style="color:#fff">29.71%</td></tr>
+        <tr style="font-weight:700;background:#f5f5f5"><td>Total</td><td class="n">28,009,795</td><td class="n">106.7M</td><td class="n">15.88</td><td class="n">123s</td><td class="n">3.81</td><td class="n">24.82%</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="lp" id="yr-2025-proyecciones"><div class="ib"><span class="it">Proyecciones</span><span class="itx">Las proyecciones están disponibles en la pestaña 2026 Q1 → Proyecciones. Los datos de 2025 son el año base completo.</span></div></div>
+  <div class="lp" id="yr-2025-produccion">
+    <div class="card"><div class="ch">Producción digital 2025 — año completo</div>
+      <table class="dt">
+        <tr><th>Métrica</th><th class="n">Valor</th></tr>
+        <tr><td>Artículos digitales totales 2025</td><td class="n">59,016</td></tr>
+        <tr><td>Promedio mensual digital</td><td class="n">4,918</td></tr>
+        <tr><td>Impreso mensual estimado</td><td class="n">~3,000</td></tr>
+        <tr><td>Total producción mensual</td><td class="n">~7,918</td></tr>
+        <tr><td>PV por artículo publicado</td><td class="n">1,808</td></tr>
+        <tr><td>Engagement total año</td><td class="n">57.6M segundos</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="lp" id="yr-2025-lealtad"><div class="ib"><span class="it">Ver tabla completa</span><span class="itx">La tabla de lealtad completa está en el panel de Panorama de 2025.</span></div></div>
+  <div class="lp" id="yr-2025-canales">
+    <div class="card"><table class="dt">
+      <tr><th>Canal</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">RFV</th><th class="n">Eng/u</th><th class="n">Scroll</th></tr>
+      <tr><td class="hi">Search</td><td class="n">21,744,237</td><td class="n">76.1M</td><td class="n">9.74</td><td class="n">114s</td><td class="n">24.18%</td></tr>
+      <tr><td class="hi">Social</td><td class="n">6,183,908</td><td class="n">19.9M</td><td class="n">17.03</td><td class="n">94s</td><td class="n">22.27%</td></tr>
+      <tr><td class="hi">Direct ⭐</td><td class="n">424,000</td><td class="n">8.1M</td><td class="n">63.19</td><td class="n">701s</td><td class="n">36.44%</td></tr>
+      <tr><td class="hi">Referral</td><td class="n">380,063</td><td class="n">1.4M</td><td class="n">33.45</td><td class="n">114s</td><td class="n">26.18%</td></tr>
+      <tr><td class="hi">AI ⭐</td><td class="n">52,497</td><td class="n">80K</td><td class="n">5.00</td><td class="n">56s</td><td class="n">36.38%</td></tr>
+      <tr><td class="hi">Email ⭐</td><td class="n">20,904</td><td class="n">171K</td><td class="n">36.16</td><td class="n">406s</td><td class="n">39.86%</td></tr>
+    </table></div>
+  </div>
+  <div class="lp" id="yr-2025-autores">
+    <div class="g2">
+      <div class="card"><div class="ch">Top autores por volumen 2025</div><div class="cw" style="height:230px"><canvas id="c25_apv" role="img" aria-label="PV autores 2025"></canvas></div></div>
+      <div class="card"><div class="ch">Top autores por RFV 2025</div><div class="cw" style="height:230px"><canvas id="c25_arfv" role="img" aria-label="RFV autores 2025"></canvas></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 2024 ====== -->
+<div class="yc" id="yr-2024">
+  <div class="lp active" id="yr-2024-resumen">
+    <div class="ib"><span class="it">Año base</span><span class="itx">Todos los datos de 2024 son año completo: 1 enero – 31 diciembre. Es el año de referencia máxima. No se recuperó ese tráfico.</span></div>
+    <div class="ms">
+      <div class="mc"><div class="ml">Usuarios únicos</div><div class="mv">39.6M</div><div class="md dn">Pico histórico reciente</div></div>
+      <div class="mc"><div class="ml">Pageviews</div><div class="mv">136.1M</div><div class="md dn">—</div></div>
+      <div class="mc"><div class="ml">Engagement / u</div><div class="mv">122s</div><div class="md dn">—</div></div>
+      <div class="mc"><div class="ml">Artículos digitales</div><div class="mv">59.2K</div><div class="md dn">4,936/mes</div></div>
+      <div class="mc"><div class="ml">Scroll promedio</div><div class="mv">25.6%</div><div class="md dn">—</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="ch">Segmentos 2024 — el año que no supimos que era el pico</div><div class="cd">45,738 Lovers con 9,397s/u. La señal de conversión que no se activó.</div><div class="cw" style="height:220px"><canvas id="c24_seg" role="img" aria-label="Segmentos 2024"></canvas></div></div>
+      <div class="card"><div class="ch">Canales 2024 — la bomba de tiempo</div><div class="cd">Search representaba el 80% del tráfico. Dependencia letal.</div><div class="cw" style="height:220px"><canvas id="c24_can" role="img" aria-label="Canales 2024"></canvas></div></div>
+    </div>
+    <div class="card"><div class="ch">Tabla de lealtad 2024</div>
+      <table class="dt">
+        <tr><th>Segmento</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">Dur/u</th><th class="n">Eng/u</th><th class="n">Scroll</th></tr>
+        <tr><td>New</td><td class="n">36,231,173</td><td class="n">48.8M</td><td class="n">132s</td><td class="n">47s</td><td class="n">26.41%</td></tr>
+        <tr><td>Fly by</td><td class="n">10,039,487</td><td class="n">29.0M</td><td class="n">266s</td><td class="n">105s</td><td class="n">24.07%</td></tr>
+        <tr><td>Won back</td><td class="n">7,998,048</td><td class="n">19.3M</td><td class="n">219s</td><td class="n">90s</td><td class="n">25.58%</td></tr>
+        <tr><td>Casual</td><td class="n">3,293,855</td><td class="n">23.7M</td><td class="n">752s</td><td class="n">242s</td><td class="n">24.14%</td></tr>
+        <tr><td>Loyal</td><td class="n">221,400</td><td class="n">6.7M</td><td class="n">3,534s</td><td class="n">1,039s</td><td class="n">26.05%</td></tr>
+        <tr style="background:#0f0f0f;color:#fff"><td class="hi" style="color:#f0f0f0">Lover ★</td><td class="n" style="color:#fff">45,738</td><td class="n" style="color:#fff">12.1M</td><td class="n" style="color:#fff">33,968s</td><td class="n" style="color:#f39c12">9,397s</td><td class="n" style="color:#fff">27.93%</td></tr>
+        <tr style="font-weight:700;background:#f5f5f5"><td>Total</td><td class="n">39,577,776</td><td class="n">136.1M</td><td class="n">346s</td><td class="n">122s</td><td class="n">25.59%</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="lp" id="yr-2024-proyecciones"><div class="ib"><span class="it">Sin proyecciones</span><span class="itx">2024 es año base completado. Las proyecciones están en la pestaña 2026 Q1.</span></div></div>
+  <div class="lp" id="yr-2024-produccion">
+    <div class="card"><div class="ch">Producción 2024</div>
+      <table class="dt">
+        <tr><th>Métrica</th><th class="n">Valor</th></tr>
+        <tr><td>Artículos digitales totales 2024</td><td class="n">59,228</td></tr>
+        <tr><td>Promedio mensual digital</td><td class="n">4,936</td></tr>
+        <tr><td>Impreso mensual estimado</td><td class="n">~3,000</td></tr>
+        <tr><td>Total mensual</td><td class="n">~7,936</td></tr>
+        <tr><td>PV por artículo (sin dato granular)</td><td class="n">n/d</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="lp" id="yr-2024-lealtad"><div class="ib"><span class="it">Ver tabla</span><span class="itx">Tabla de lealtad completa en el panel de Panorama de 2024.</span></div></div>
+  <div class="lp" id="yr-2024-canales">
+    <div class="card"><table class="dt">
+      <tr><th>Canal</th><th class="n">Usuarios</th><th class="n">PV</th><th class="n">Dur/u</th><th class="n">Eng/u</th><th class="n">Scroll</th></tr>
+      <tr><td class="hi">Search</td><td class="n">31,613,320</td><td class="n">89.6M</td><td class="n">269s</td><td class="n">104s</td><td class="n">26.56%</td></tr>
+      <tr><td class="hi">Social</td><td class="n">8,384,261</td><td class="n">20.3M</td><td class="n">251s</td><td class="n">86s</td><td class="n">24.60%</td></tr>
+      <tr><td class="hi">Referral</td><td class="n">1,574,044</td><td class="n">17.0M</td><td class="n">1,095s</td><td class="n">307s</td><td class="n">19.19%</td></tr>
+      <tr><td class="hi">Direct ⭐</td><td class="n">872,610</td><td class="n">8.0M</td><td class="n">1,429s</td><td class="n">331s</td><td class="n">29.66%</td></tr>
+      <tr><td class="hi">Email ⭐</td><td class="n">24,817</td><td class="n">144K</td><td class="n">789s</td><td class="n">266s</td><td class="n">36.13%</td></tr>
+    </table></div>
+  </div>
+  <div class="lp" id="yr-2024-autores"><div class="ib"><span class="it">Nota</span><span class="itx">Datos RFV por autor no disponibles para 2024. Ver 2025 y 2026 para análisis de autores.</span></div></div>
+</div>
+
+<!-- ====== CRUCES ====== -->
+<div class="yc" id="yr-cruces">
+  <div class="lp active" id="yr-cruces-resumen">
+    <div class="aip">
+      <div class="aip-head">Cruces críticos · período correcto · señales urgentes</div>
+      <div class="aip-grid">
+        <div class="aip-cross"><div class="aip-title">Cruce: Producción × Eficiencia</div><div class="aip-text">Q1 2026: 5,295 arts/mes (+7.7% vs 2025) pero cada uno llega a 811 lectores vs 1,808 en 2025. Se produce más para alcanzar menos.</div><div class="aip-num r">–55%</div><div class="aip-title" style="margin-top:5px">Eficiencia editorial en caída libre</div></div>
+        <div class="aip-cross"><div class="aip-title">Cruce: Lovers × Extinción × Tiempo</div><div class="aip-text">A la tasa de Q1 (–34%/mes compuesto), los Lovers pasan de 9,356 en abril a menos de 400 en diciembre. El segmento más valioso desaparece este año.</div><div class="aip-num r">&lt;400</div><div class="aip-title" style="margin-top:5px">Lovers proyectados a dic-2026</div></div>
+        <div class="aip-cross"><div class="aip-title">Cruce: Social × Volumen × Calidad</div><div class="aip-text">Social sube de 22% a 37% del mix total en Q1 2026. Pero su engagement cae de 94s a 50s (–46%). Más tráfico, menos lectura. La falsa recuperación.</div><div class="aip-num r">–46%</div><div class="aip-title" style="margin-top:5px">Eng Social 2025→2026 Q1</div></div>
+        <div class="aip-cross"><div class="aip-title">Cruce: Email × Resistencia</div><div class="aip-text">Email pierde solo 10% de engagement en un período donde el general cae 30%. RFV estable en 36. Con 7K usuarios activos equivale a un segmento Loyal. El newsletter no se está explotando.</div><div class="aip-num g">RFV 36</div><div class="aip-title" style="margin-top:5px">Resistencia del canal más subutilizado</div></div>
+        <div class="aip-cross"><div class="aip-title">Cruce: Canal AI × Oportunidad</div><div class="aip-text">El único canal que no cayó (52K→51K usuarios). Scroll 37% — el doble que Social. Engagement sube de 56s a 64s. Los lectores que llegan por IA generativa son el perfil del futuro suscriptor.</div><div class="aip-num g">+14%</div><div class="aip-title" style="margin-top:5px">Crecimiento engagement canal AI Q1 2026</div></div>
+        <div class="aip-cross"><div class="aip-title">Cruce: Direct × Piso Sólido</div><div class="aip-text">Direct tiene RFV 56–63 en los tres años sin excepción. Es el único canal que no se degrada. 294K usuarios con 1,119s/u. El canal de la audiencia que elige a Vanguardia deliberadamente.</div><div class="aip-num g">RFV 56</div><div class="aip-title" style="margin-top:5px">Único canal estable en los 3 años</div></div>
+      </div>
+    </div>
+
+    <div class="sh">Comparativa tridimensional: período correcto 2024 anual / 2025 anual / 2026 Q1 <span></span></div>
+
+    <div class="g2">
+      <div class="card"><div class="ch">Usuarios y PV — tres períodos (cuidado con la escala)</div><div class="cd">2026 son solo 4 meses. Anualizado llegaría a ~20M usuarios (escenario mismo ritmo).</div><div class="cw" style="height:220px"><canvas id="cx_tot" role="img" aria-label="Total 3 periodos"></canvas></div></div>
+      <div class="card"><div class="ch">Eficiencia de producción: PV por artículo</div><div class="cd">La curva más demoledora: más producción, menos alcance. El sistema no distribuye, no descubre.</div><div class="cw" style="height:220px"><canvas id="cx_eff" role="img" aria-label="Eficiencia produccion"></canvas></div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px"><div class="ch">Matriz de decisión urgente — datos calibrados al período correcto</div>
+      <table class="dt">
+        <tr><th>Señal</th><th>Dato verificado</th><th>Acción</th><th>Urgencia</th></tr>
+        <tr><td class="hi">Lovers en extinción Q1 2026</td><td>9,356 → proyección dic: ~331–400</td><td>Paywall suave para Lovers y Loyals inmediato</td><td><span class="pill pr">🔴 Crítico</span></td></tr>
+        <tr><td class="hi">Email: –10% eng vs –30% general</td><td>RFV 36 estable en 2025 y 2026</td><td>Newsletter diario Saltillo con CTA conversión</td><td><span class="pill pr">🔴 Crítico</span></td></tr>
+        <tr><td class="hi">Producción sube, eficiencia cae –55%</td><td>5,295 arts/mes → 811 PV/art vs 1,808</td><td>Reducir 20% volumen, concentrar SEO estructural</td><td><span class="pill pr">🔴 Urgente</span></td></tr>
+        <tr><td class="hi">Search colapsa –82% en Q1</td><td>21.7M (2025 anual) → 3.8M (Q1 solo)</td><td>Estrategia AEO + indexación IA generativa</td><td><span class="pill pr">🔴 Urgente</span></td></tr>
+        <tr><td class="hi">Canal AI único que no cae</td><td>51K estable, scroll 37%, eng +14%</td><td>Optimizar para Perplexity, ChatGPT, Gemini</td><td><span class="pill pa">🟡 Alto</span></td></tr>
+        <tr><td class="hi">Catón / Politicón resisten</td><td>RFV 36–55, scroll 40–45%</td><td>Columnas exclusivas detrás de registro gratuito</td><td><span class="pill pa">🟡 Alto</span></td></tr>
+        <tr><td class="hi">Direct: RFV 56–63 en 3 años</td><td>294K usuarios, 1,119s/u en Q1 2026</td><td>App nativa / push para lectores directos</td><td><span class="pill pa">🟡 Alto</span></td></tr>
+      </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><div class="ch">Núcleo fiel (Loyal + Lover) — los tres períodos</div><div class="cd">La audiencia premium colapsa: de 267K (2024) a 53K (Q1 2026)</div><div class="cw" style="height:220px"><canvas id="cx_core" role="img" aria-label="Core 3 periodos"></canvas></div></div>
+      <div class="card"><div class="ch">Proyección Lovers 2026 — tres escenarios</div><div class="cd">Incluso en el escenario mejor, se necesita conversión activa para retener al segmento</div><div class="cw" style="height:220px"><canvas id="cx_lov2" role="img" aria-label="Proyeccion Lovers"></canvas></div></div>
+    </div>
+  </div>
+  <div class="lp" id="yr-cruces-proyecciones"><div class="ib"><span class="it">Proyecciones completas</span><span class="itx">Ver la pestaña 2026 Q1 → Proyecciones para los tres escenarios detallados mes a mes.</span></div></div>
+  <div class="lp" id="yr-cruces-produccion"></div>
+  <div class="lp" id="yr-cruces-lealtad"></div>
+  <div class="lp" id="yr-cruces-canales"></div>
+  <div class="lp" id="yr-cruces-autores"></div>
+</div>
+
+<div class="footer">
+  <span>PULSO · Vanguardia · Saltillo</span>
+  <span>2024 anual · 2025 anual · 2026 Q1 (ene–abr) + proyecciones</span>
+  <span>Lab. Innovación Editorial</span>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let aY='2026',aL='resumen';
+function setY(y,b){
+  document.querySelectorAll('.yc').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.ybtn').forEach(e=>e.classList.remove('active'));
+  aY=y;document.getElementById('yr-'+y).classList.add('active');b.classList.add('active');
+  document.querySelectorAll('.lp').forEach(e=>e.classList.remove('active'));
+  const lp=document.getElementById('yr-'+y+'-'+aL);
+  if(lp)lp.classList.add('active');
+  else document.getElementById('yr-'+y+'-resumen').classList.add('active');
+}
+function setL(l,b){
+  document.querySelectorAll('.lp').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.lbtn').forEach(e=>e.classList.remove('active'));
+  aL=l;b.classList.add('active');
+  const lp=document.getElementById('yr-'+aY+'-'+l);
+  if(lp)lp.classList.add('active');
+}
+
+Chart.defaults.font.family='Georgia,serif';
+Chart.defaults.color='#888580';
+Chart.defaults.plugins.legend.display=false;
+const gc='rgba(0,0,0,0.06)';
+const B='#1d4e89',R='#c0392b',G='#1a6b4a',A='#b5620a',P='#5b2d8e',M='#888580';
+function co(e={}){return Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}}}},e);}
+function hb(e={}){return Object.assign(co(),{indexAxis:'y'},e);}
+
+// 2026 charts
+new Chart('c26_seg',{type:'bar',data:{labels:['New','Fly by','Won back','Casual','Loyal','Lover'],datasets:[{label:'2025 (año)',data:[24121,6528,6826,2395,187,50],backgroundColor:B+'99',borderRadius:0},{label:'2026 Q1',data:[6165,1098,738,538,44,9],backgroundColor:R,borderRadius:0}]},options:{...co(),plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:8,padding:10}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()+'K'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{type:'logarithmic',grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v>=1000?(v/1000)+'K':v}}}}});
+new Chart('c26_eng',{type:'bar',data:{labels:['Lover','Loyal','Casual','Fly by','Won back','New'],datasets:[{data:[30237,3261,736,240,202,156],backgroundColor:[B,P,A,G,'#888',M],borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+'s/u'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v>=1000?(v/1000).toFixed(0)+'Ks':v+'s'}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}}}}});
+new Chart('c26_mix',{type:'doughnut',data:{labels:['Search 57%','Social 37%','Direct 4%','Referral 2%','Otros'],datasets:[{data:[57,37,4,2,1],backgroundColor:[B,A,P,G,M],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{font:{size:9,family:'Courier New'},boxWidth:8,padding:6}}}}});
+new Chart('c26_pvpu',{type:'bar',data:{labels:['Lover','Loyal','Casual','Fly by','Won back','New'],datasets:[{data:[224,25,5.7,1.9,1.7,1.3],backgroundColor:[B,P,A,G,'#888',M],borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' pv/u'}}}}});
+new Chart('c26_funnel',{type:'bar',data:{labels:['New','Fly by','Won back','Casual','Loyal','Lover'],datasets:[{label:'% Usuarios',data:[91.1,16.2,10.9,8.0,0.64,0.14],backgroundColor:B+'99',borderRadius:0},{label:'% Pageviews',data:[48.3,11.8,7.5,17.8,6.3,12.4],backgroundColor:R,borderRadius:0}]},options:{...co(),plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:8}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'%'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+'%'},max:100}}}});
+new Chart('c26_cu',{type:'bar',data:{labels:['Search','Social','Direct','Referral','AI','Email'],datasets:[{data:[3846,2512,294,132,51,7],backgroundColor:[B,A,P,G,'#e74c3c',R],borderRadius:0}]},options:{...co(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'K usuarios'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+'K'}}}}});
+new Chart('c26_cr',{type:'bar',data:{labels:['Direct','Email','Referral','Social','Search','AI'],datasets:[{label:'2025',data:[63.19,36.16,33.45,17.03,9.74,5.00],backgroundColor:B+'88',borderRadius:0},{label:'2026 Q1',data:[56.19,35.86,23.39,13.01,9.33,5.49],backgroundColor:R,borderRadius:0}]},options:{...co(),plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:8}}}}});
+new Chart('c26_apv',{type:'bar',data:{labels:['C. Martínez','Rebeca G.','El Universal','Stephanie L.','Karla V.','Vanguardia','A. Morteo','Sara N.'],datasets:[{data:[3995717,696990,589179,701775,561218,401746,355265,296805],backgroundColor:B,borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()+' PV'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':(v/1000).toFixed(0)+'K'}},y:{grid:{color:gc},ticks:{font:{size:8,family:'Courier New'}}}}}});
+new Chart('c26_arfv',{type:'bar',data:{labels:['Catón','Armando F.A.','Federico B.','Enrique A.','Raymundo R.P.','C. Loret M.','Politicón'],datasets:[{data:[54.74,52.08,53.54,48.20,44.26,41.20,33.78],backgroundColor:G,borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'RFV: '+c.raw}}}}});
+
+// Proyecciones
+const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+// Lover decay: monthly factor 0.6587 from data
+const lf=0.6587;
+const lover0=9356;
+const lovW=[lover0];const lovS=[lover0];const lovB=[lover0];
+for(let i=1;i<9;i++){lovW.push(Math.round(lovW[i-1]*lf*0.88));lovS.push(Math.round(lovS[i-1]*lf));lovB.push(Math.round(lovB[i-1]*(lf*1.3<1?lf*1.3:0.85)));}
+// Users projection
+const um=6765237/4; // monthly Q1
+const usersMonths=[...Array(4).fill(null)];
+const uW=[],uS=[],uB=[];
+for(let i=0;i<8;i++){uW.push(Math.round(um*0.85));uS.push(Math.round(um));uB.push(Math.round(um*1.20));}
+new Chart('cx_lovers_proj',{type:'line',data:{labels:months,datasets:[{label:'Peor',data:[...lovW.slice(0,1),...lovW],borderColor:R,tension:.3,pointRadius:4,borderDash:[4,3]},{label:'Mismo ritmo',data:[...lovS.slice(0,1),...lovS],borderColor:M,tension:.3,pointRadius:4},{label:'Mejor',data:[...lovB.slice(0,1),...lovB],borderColor:G,tension:.3,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:10}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v.toLocaleString()}}}}});
+// Full year monthly users
+const q1m=[1.77,1.63,1.69,1.66].map(v=>v*1e6); // rough Q1 monthly
+const wFull=[...q1m,...Array(8).fill(Math.round(um*0.85))];
+const sFull=[...q1m,...Array(8).fill(Math.round(um))];
+const bFull=[...q1m,...Array(8).fill(Math.round(um*1.20))];
+new Chart('cx_users_proj',{type:'line',data:{labels:months,datasets:[{label:'Peor (~18.3M)',data:wFull,borderColor:R,tension:.3,pointRadius:3,borderDash:[4,3]},{label:'Mismo (~20.3M)',data:sFull,borderColor:M,tension:.3,pointRadius:3},{label:'Mejor (~23M)',data:bFull,borderColor:G,tension:.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:10}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>(v/1e6).toFixed(1)+'M'}}}}});
+
+// Producción
+new Chart('cx_pv_art',{type:'bar',data:{labels:['2025 (año completo)','2026 Q1 (ene–abr)','2026 proyectado'],datasets:[{data:[1808,811,811],backgroundColor:[G,R,R+'88'],borderRadius:0}]},options:{...co(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' PV/artículo'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+' PV'}}}}});
+new Chart('cx_prod_reach',{type:'line',data:{labels:['2025 (año)','2026 Q1','2026 proyec.'],datasets:[{label:'Arts/mes (digital)',data:[4918,5295,5295],borderColor:A,tension:.3,pointRadius:5,yAxisID:'y'},{label:'PV/artículo',data:[1808,811,811],borderColor:R,tension:.3,pointRadius:5,borderDash:[4,3],yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:10}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}},position:'left'},y2:{grid:{display:false},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+' PV'},position:'right'}}}});
+
+// 2025 charts
+new Chart('c25_seg',{type:'bar',data:{labels:['New','Won back','Fly by','Casual','Loyal','Lover'],datasets:[{data:[24121141,6826316,6528103,2395039,187498,49705],backgroundColor:[M,M,M,A,B,R],borderRadius:0}]},options:{...co(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{type:'logarithmic',grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v>=1e6?(v/1e6).toFixed(0)+'M':v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+new Chart('c25_can',{type:'doughnut',data:{labels:['Search 78%','Social 22%','Direct 2%','Referral 1%','Otros'],datasets:[{data:[78,22,2,1,1],backgroundColor:[B,A,P,G,M],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{font:{size:9,family:'Courier New'},boxWidth:8,padding:6}}}}});
+new Chart('c25_apv',{type:'bar',data:{labels:['Carlos M.','Stephanie L.','Sara N.','Karla V.','Rebeca G.','Andrés R.'],datasets:[{data:[39222,9685,5100,4624,2415,1884],backgroundColor:B,borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'K PV'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+'K'}},y:{grid:{color:gc},ticks:{font:{size:8,family:'Courier New'}}}}}});
+new Chart('c25_arfv',{type:'bar',data:{labels:['Lover anon.','A.F.A. Catón','Federico B.','porCalderón','Politicón','Catón'],datasets:[{data:[83.40,52.35,48.55,41.89,37.16,36.34],backgroundColor:G,borderRadius:0}]},options:{...hb(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'RFV: '+c.raw}}}}});
+
+// 2024 charts
+new Chart('c24_seg',{type:'bar',data:{labels:['New','Fly by','Won back','Casual','Loyal','Lover'],datasets:[{data:[36231,10039,7998,3294,221,46],backgroundColor:[M+'88',M+'88',M+'88',A,B,R],borderRadius:0}]},options:{...co(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'K usuarios'}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+'K'}}}}});
+new Chart('c24_can',{type:'doughnut',data:{labels:['Search 80%','Social 21%','Referral 4%','Direct 2%','Otros'],datasets:[{data:[80,21,4,2,1],backgroundColor:[B,A,G,P,M],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{font:{size:9,family:'Courier New'},boxWidth:8,padding:6}}}}});
+
+// Cruces charts
+new Chart('cx_tot',{type:'bar',data:{labels:['2024\n(año completo)','2025\n(año completo)','2026 Q1\n(ene–abr)'],datasets:[{label:'Usuarios',data:[39.6,28.0,6.8],backgroundColor:[M+'88',B+'88',R],borderRadius:0},{label:'PV (M)',data:[136.1,106.7,17.2],backgroundColor:[M+'44',B+'44',R+'66'],borderRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:8}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v+'M'}}}}});
+new Chart('cx_eff',{type:'line',data:{labels:['2025 (año)','2026 Q1','2026 proyec.'],datasets:[{label:'PV/artículo',data:[1808,811,811],borderColor:R,backgroundColor:R+'22',tension:.3,pointRadius:7,fill:true},{label:'Arts/mes digital',data:[4918,5295,5295],borderColor:A,tension:.3,pointRadius:7,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:10}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}}}}});
+new Chart('cx_core',{type:'bar',data:{labels:['2024 (año)','2025 (año)','2026 Q1'],datasets:[{label:'Loyal',data:[221400,187498,43646],backgroundColor:B,borderRadius:0},{label:'Lover',data:[45738,49705,9356],backgroundColor:R,borderRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:8}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+// Lovers projection (cruces version)
+const lMonths=['Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const lSc=[9356],lSs=[9356],lSb=[9356];
+for(let i=1;i<9;i++){lSc.push(Math.round(lSc[i-1]*0.58));lSs.push(Math.round(lSs[i-1]*lf));lSb.push(Math.round(lSb[i-1]*0.80));}
+new Chart('cx_lov2',{type:'line',data:{labels:lMonths,datasets:[{label:'Peor',data:lSc,borderColor:R,tension:.3,pointRadius:4,borderDash:[4,3]},{label:'Mismo ritmo',data:lSs,borderColor:M,tension:.3,pointRadius:4},{label:'Mejor',data:lSb,borderColor:G,tension:.3,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:9,family:'Courier New'},boxWidth:10}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'}}},y:{grid:{color:gc},ticks:{font:{size:9,family:'Courier New'},callback:v=>v.toLocaleString()}}}}});
+</script>
